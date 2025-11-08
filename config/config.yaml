@@ -1,0 +1,85 @@
+# Application settings
+app:
+  title: "Dental Panoramik X-Ray Segmentasyon"
+  page_icon: "🦷"
+  layout: "wide"
+  initial_sidebar_state: "expanded"
+
+# Classes for annotation
+classes:
+  - id: 0
+    name: "tooth"
+    name_tr: "diş"
+    color: "#FF0000"
+  - id: 1
+    name: "lesion"
+    name_tr: "lezyon"
+    color: "#00FF00"
+  - id: 2
+    name: "filling"
+    name_tr: "dolgu"
+    color: "#0000FF"
+  - id: 3
+    name: "crown"
+    name_tr: "kron"
+    color: "#FFFF00"
+  - id: 4
+    name: "implant"
+    name_tr: "implant"
+    color: "#FF00FF"
+  - id: 5
+    name: "root_canal"
+    name_tr: "kanal tedavisi"
+    color: "#00FFFF"
+  - id: 6
+    name: "caries"
+    name_tr: "çürük"
+    color: "#FFA500"
+
+# Dataset split ratios
+dataset:
+  train_ratio: 0.7
+  val_ratio: 0.2
+  test_ratio: 0.1
+  min_images_per_split: 1
+
+# Training defaults
+training:
+  available_models:
+    - "yolo11n-seg.pt"
+    - "yolo11s-seg.pt"
+    - "yolo11m-seg.pt"
+    - "yolo11l-seg.pt"
+    - "yolo11x-seg.pt"
+  default_model: "yolo11s-seg.pt"
+  default_epochs: 100
+  default_batch_size: 16
+  default_imgsz: 640
+  default_lr: 0.001
+  patience: 50
+  save_period: 10
+
+# Inference defaults
+inference:
+  default_confidence: 0.25
+  default_iou: 0.45
+  max_det: 300
+  line_width: 2
+
+# Paths
+paths:
+  raw_images: "data/raw_images"
+  dataset: "data/dataset"
+  annotations: "data/annotations"
+  pretrained_models: "models/pretrained"
+  trained_models: "models/trained"
+  training_results: "outputs/training_results"
+  inference_results: "outputs/inference_results"
+
+# Image settings
+image:
+  max_upload_size_mb: 10
+  supported_formats: ["jpg", "jpeg", "png", "bmp"]
+  display_width: 800
+  annotation_canvas_height: 600
+

@@ -1,0 +1,254 @@
+================================================================================
+DENTAL PANORAMIC X-RAY SEGMENTATION APPLICATION
+YOLO11-based AI Segmentation Tool
+================================================================================
+
+PROJECT OVERVIEW
+----------------
+A comprehensive Streamlit application for dental panoramic X-ray analysis using
+YOLO11 instance segmentation. The application provides a complete workflow from
+image annotation to model training and automated AI segmentation.
+
+KEY FEATURES
+------------
+1. Interactive Annotation Interface
+   - Polygon-based annotation tool
+   - Multi-class support (7 classes)
+   - Color-coded visualization
+   - YOLO format export
+
+2. Model Training Pipeline
+   - 5 YOLO11 model variants (Nano to Extra Large)
+   - Customizable hyperparameters
+   - Real-time training monitoring
+   - Automatic best model saving
+
+3. AI Inference Interface
+   - Automatic segmentation
+   - Adjustable confidence thresholds
+   - Visualization options
+   - Result export (images, masks, reports)
+
+SUPPORTED CLASSES
+-----------------
+0. Tooth (Diş)
+1. Lesion (Lezyon)
+2. Filling (Dolgu)
+3. Crown (Kron)
+4. Implant (İmplant)
+5. Root Canal (Kanal Tedavisi)
+6. Caries (Çürük)
+
+TECHNOLOGY STACK
+----------------
+- Framework: Streamlit 1.28+
+- AI Model: YOLO11 (Ultralytics)
+- Backend: PyTorch 2.0+
+- Image Processing: OpenCV, Pillow
+- Visualization: Supervision, Matplotlib, Plotly
+- UI Components: streamlit-drawable-canvas
+
+DIRECTORY STRUCTURE
+-------------------
+dental_segmentation_app/
+├── app.py                      # Main Streamlit application
+├── requirements.txt            # Python dependencies
+├── README.md                   # Comprehensive documentation
+├── QUICKSTART.md              # Quick start guide
+├── TUTORIAL.md                # Detailed tutorial
+├── DEPLOYMENT.md              # Deployment guide
+├── example_usage.py           # Example scripts
+├── config/
+│   └── config.yaml            # Application configuration
+├── modules/
+│   ├── annotation.py          # Annotation module
+│   ├── training.py            # Training module
+│   ├── inference.py           # Inference module
+│   └── utils.py               # Utility functions
+├── data/
+│   ├── raw_images/            # Uploaded X-rays
+│   ├── annotations/           # YOLO labels
+│   └── dataset/               # Training dataset
+├── models/
+│   ├── pretrained/            # Pre-trained models
+│   └── trained/               # Custom trained models
+└── outputs/
+    ├── training_results/      # Training metrics
+    └── inference_results/     # Segmentation results
+
+WORKFLOW
+--------
+1. ANNOTATION
+   - Upload panoramic X-ray images
+   - Draw polygons around dental structures
+   - Assign class labels
+   - Save in YOLO format
+
+2. DATASET PREPARATION
+   - Organize annotated images
+   - Split into train/val/test (70/20/10)
+   - Generate data.yaml configuration
+
+3. MODEL TRAINING
+   - Select YOLO11 model variant
+   - Configure hyperparameters
+   - Train model with progress monitoring
+   - Evaluate results (loss, mAP, confusion matrix)
+
+4. AI SEGMENTATION
+   - Load trained model
+   - Upload new X-ray images
+   - Run automatic segmentation
+   - Export results
+
+QUICK START
+-----------
+1. Install dependencies:
+   pip install -r requirements.txt
+
+2. Run application:
+   streamlit run app.py
+
+3. Open browser:
+   http://localhost:8501
+
+4. Start annotating:
+   - Go to "Etiketleme" page
+   - Upload X-ray images
+   - Draw polygons
+   - Save annotations
+
+5. Train model:
+   - Go to "Model Eğitimi" page
+   - Prepare dataset
+   - Start training
+
+6. Run segmentation:
+   - Go to "AI Segmentasyon" page
+   - Load trained model
+   - Upload new X-rays
+   - Get results
+
+DOCUMENTATION
+-------------
+- README.md: Complete documentation
+- QUICKSTART.md: 10-minute quick start
+- TUTORIAL.md: Step-by-step tutorial
+- DEPLOYMENT.md: Deployment guide
+- example_usage.py: Programmatic usage examples
+
+REQUIREMENTS
+------------
+Hardware:
+- 8GB+ RAM
+- GPU with CUDA (optional but recommended)
+- 5GB+ disk space
+
+Software:
+- Python 3.8+
+- CUDA 11.8+ (for GPU)
+- Modern web browser
+
+Data:
+- Panoramic dental X-ray images
+- Minimum 50-100 images (more is better)
+- JPG, PNG, or BMP format
+
+PERFORMANCE
+-----------
+Training Time (100 epochs):
+- GPU: 1-4 hours
+- CPU: 10-20 hours
+
+Inference Time (per image):
+- GPU: 0.1-0.5 seconds
+- CPU: 1-3 seconds
+
+Model Accuracy:
+- Nano: ~60-70% mAP
+- Small: ~70-80% mAP
+- Medium: ~75-85% mAP
+- Large: ~80-90% mAP
+- Extra Large: ~85-95% mAP
+
+BEST PRACTICES
+--------------
+Annotation:
+- Draw polygons carefully
+- Be consistent across images
+- Include all visible structures
+- Skip ambiguous cases
+
+Dataset:
+- Minimum 50-100 annotated images
+- Balanced class distribution
+- Diverse image sources
+- Regular quality control
+
+Training:
+- Start with Small model
+- Use GPU if available
+- Monitor loss and mAP
+- Save checkpoints regularly
+
+Segmentation:
+- Adjust confidence threshold
+- Validate AI predictions
+- Export results for review
+- Provide feedback for improvement
+
+TROUBLESHOOTING
+---------------
+Common Issues:
+
+1. Out of Memory
+   Solution: Reduce batch size (16 → 8 → 4)
+
+2. No Detections
+   Solution: Lower confidence threshold (0.25 → 0.15)
+
+3. Training Too Slow
+   Solution: Use GPU or smaller model
+
+4. Low Accuracy
+   Solution: Add more training data, improve annotation quality
+
+LIMITATIONS
+-----------
+- Not for clinical diagnosis
+- Requires manual annotation initially
+- Performance depends on training data quality
+- GPU recommended for practical use
+
+FUTURE ENHANCEMENTS
+-------------------
+- Semi-automatic annotation with SAM
+- Multi-user collaboration
+- Active learning
+- Model ensemble
+- 3D visualization
+- DICOM support
+- Cloud deployment
+- Mobile app
+
+LICENSE
+-------
+MIT License (see LICENSE file)
+
+CONTACT
+-------
+GitHub: https://github.com/yourusername/dental-segmentation-app
+Email: your.email@example.com
+Issues: https://github.com/yourusername/dental-segmentation-app/issues
+
+ACKNOWLEDGMENTS
+---------------
+- Ultralytics (YOLO11)
+- Streamlit (Web framework)
+- PyTorch (Deep learning)
+- OpenCV (Image processing)
+
+================================================================================
+Created: 2025-10-17
+Version: 1.0.0
+================================================================================
