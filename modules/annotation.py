@@ -231,7 +231,8 @@ class AnnotationInterface:
             stroke_color = self.classes[st.session_state.get('selected_class', 0)]['color']
             
             # Convert PIL Image to numpy array for canvas
-            canvas_image = np.array(image)
+            # Use None if image is not available to avoid boolean check issues
+            canvas_image = np.array(image) if image is not None else None
             
             canvas_result = st_canvas(
                 fill_color="rgba(255, 165, 0, 0.3)",
