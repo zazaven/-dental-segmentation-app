@@ -15,7 +15,7 @@ supervision>=0.16.0
 plotly>=5.17.0
 
 # UI components
-streamlit-drawable-canvas>=0.9.3
+streamlit-drawable-canvas==0.9.2
 
 # Data handling
 pandas>=2.0.0
@@ -23,4 +23,3 @@ PyYAML>=6.0.0
 
 # Utilities
 tqdm>=4.66.0
-
