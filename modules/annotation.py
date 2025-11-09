@@ -194,13 +194,28 @@ class AnnotationInterface:
         # Get image dimensions
         img_width, img_height = image.size
         
-        # Calculate canvas size (maintain aspect ratio)
-        canvas_width = self.config['image']['display_width']
+        # Zoom control
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            zoom_level = st.slider(
+                "🔍 Zoom Seviyesi",
+                min_value=50,
+                max_value=200,
+                value=100,
+                step=10,
+                help="Görüntüyü büyütmek için kaydırın (hassas çizim için)"
+            )
+        with col2:
+            st.metric("Zoom", f"{zoom_level}%")
+        
+        # Calculate canvas size with zoom (maintain aspect ratio)
+        base_width = self.config['image']['display_width']
+        canvas_width = int(base_width * (zoom_level / 100))
         aspect_ratio = img_height / img_width
         canvas_height = int(canvas_width * aspect_ratio)
         
         # Display image info
-        st.info(f"📐 Görüntü Boyutu: {img_width} x {img_height} piksel")
+        st.info(f"📐 Orijinal Boyut: {img_width} x {img_height} px | Canvas Boyut: {canvas_width} x {canvas_height} px")
         
         # Instructions
         with st.expander("📖 Kullanım Talimatları", expanded=False):
