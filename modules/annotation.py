@@ -35,8 +35,8 @@ class AnnotationInterface:
     
     def render(self):
         """Render the annotation interface"""
-        st.header("🖊️ Etiketleme Arayüzü")
-        st.markdown("Panoramik diş röntgenlerinde diş, lezyon ve diğer yapıları etiketleyin.")
+        st.header("🖊️ Annotation Interface")
+        st.markdown("Label teeth, lesions, and other structures in panoramic dental X-rays.")
         
         # Create two columns
         col1, col2 = st.columns([2, 1])
@@ -49,13 +49,13 @@ class AnnotationInterface:
     
     def _render_controls(self):
         """Render control panel"""
-        st.subheader("Kontroller")
+        st.subheader("Controls")
         
         # Image upload
         uploaded_file = st.file_uploader(
-            "Panoramik X-Ray Yükle",
+            "Upload Panoramic X-Ray",
             type=self.config['image']['supported_formats'],
-            help="Diş panoramik röntgen görüntüsü yükleyin"
+            help="Upload a dental panoramic X-ray image"
         )
         
         if uploaded_file is not None:
@@ -65,14 +65,14 @@ class AnnotationInterface:
                 f.write(uploaded_file.getbuffer())
             
             st.session_state.current_image = image_path
-            st.success(f"✅ Görüntü yüklendi: {uploaded_file.name}")
+            st.success(f"✅ Image uploaded: {uploaded_file.name}")
             
             # Load existing annotations if any
             self._load_existing_annotations()
         
         # Image selection from existing
         st.markdown("---")
-        st.subheader("📁 Panoramik Filmler")
+        st.subheader("📁 Panoramic Films")
         
         if os.path.exists(self.raw_images_dir):
             image_files = [f for f in os.listdir(self.raw_images_dir)
@@ -80,10 +80,10 @@ class AnnotationInterface:
             
             if image_files:
                 # Display image count
-                st.info(f"📊 Toplam {len(image_files)} panoramik film")
+                st.info(f"📊 Total {len(image_files)} panoramic films")
                 
                 # List all images with thumbnails
-                st.markdown("**Film Listesi:**")
+                st.markdown("**Film List:**")
                 for idx, img_file in enumerate(image_files, 1):
                     img_path = os.path.join(self.raw_images_dir, img_file)
                     
@@ -96,87 +96,87 @@ class AnnotationInterface:
                             
                             # Image info
                             img_width, img_height = img.size
-                            st.caption(f"📐 Boyut: {img_width} x {img_height} piksel")
+                            st.caption(f"📐 Size: {img_width} x {img_height} pixels")
                             
                             # Check if annotated
                             label_name = Path(img_file).stem + '.txt'
                             label_path = os.path.join(self.annotations_dir, label_name)
                             if os.path.exists(label_path):
-                                st.success("✅ Etiketlenmiş")
+                                st.success("✅ Annotated")
                             else:
-                                st.warning("⚠️ Henüz etiketlenmemiş")
+                                st.warning("⚠️ Not yet annotated")
                             
                             # Load button
-                            if st.button(f"📂 Bu Filmi Yükle", key=f"load_{idx}"):
+                            if st.button(f"📂 Load This Film", key=f"load_{idx}"):
                                 st.session_state.current_image = img_path
                                 self._load_existing_annotations()
                                 st.rerun()
                         except Exception as e:
-                            st.error(f"Görüntü yüklenemedi: {e}")
+                            st.error(f"Failed to load image: {e}")
                 
                 st.markdown("---")
                 # Quick select dropdown
-                st.markdown("**Hızlı Seçim:**")
+                st.markdown("**Quick Select:**")
                 selected_image = st.selectbox(
-                    "Film Seç",
+                    "Select Film",
                     options=image_files,
-                    help="Etiketlemek için bir film seçin"
+                    help="Select a film to annotate"
                 )
                 
-                if st.button("📂 Seçili Filmi Yükle", type="primary"):
+                if st.button("📂 Load Selected Film", type="primary"):
                     st.session_state.current_image = os.path.join(self.raw_images_dir, selected_image)
                     self._load_existing_annotations()
                     st.rerun()
             else:
-                st.info("📭 Henüz yüklenmiş film yok")
-                st.markdown("👆 Yukarıdaki 'Panoramik X-Ray Yükle' butonunu kullanarak film ekleyin")
+                st.info("📭 No films uploaded yet")
+                st.markdown("👆 Use the 'Upload Panoramic X-Ray' button above to add films")
         
         # Class selection
         if st.session_state.current_image:
             st.markdown("---")
-            st.subheader("Sınıf Seçimi")
+            st.subheader("Class Selection")
             
-            class_options = [f"{c['name_tr']} ({c['name']})" for c in self.classes]
+            class_options = [c['name'].title() for c in self.classes]
             selected_class_idx = st.selectbox(
-                "Etiket Sınıfı",
+                "Label Class",
                 options=range(len(self.classes)),
                 format_func=lambda x: class_options[x],
-                help="Çizmek istediğiniz yapının sınıfını seçin"
+                help="Select the class of the structure you want to draw"
             )
             
             st.session_state.selected_class = selected_class_idx
             
             # Display color
             selected_color = self.classes[selected_class_idx]['color']
-            st.color_picker("Sınıf Rengi", selected_color, disabled=True)
+            st.color_picker("Class Color", selected_color, disabled=True)
             
             # Annotation list
             st.markdown("---")
-            st.subheader("Etiketler")
+            st.subheader("Annotations")
             
             if st.session_state.current_annotations:
                 for idx, ann in enumerate(st.session_state.current_annotations):
-                    class_name = self.classes[ann['class_id']]['name_tr']
+                    class_name = self.classes[ann['class_id']]['name'].title()
                     col_a, col_b = st.columns([3, 1])
                     with col_a:
-                        st.text(f"{idx + 1}. {class_name} ({len(ann['polygon'])} nokta)")
+                        st.text(f"{idx + 1}. {class_name} ({len(ann['polygon'])} points)")
                     with col_b:
                         if st.button("🗑️", key=f"delete_{idx}"):
                             st.session_state.current_annotations.pop(idx)
                             self._save_annotations()
                             st.rerun()
             else:
-                st.info("Henüz etiket yok")
+                st.info("No annotations yet")
             
             # Save button
             st.markdown("---")
-            if st.button("💾 Etiketleri Kaydet", type="primary", use_container_width=True):
+            if st.button("💾 Save Annotations", type="primary", use_container_width=True):
                 self._save_annotations()
-                st.success("✅ Etiketler kaydedildi!")
+                st.success("✅ Annotations saved!")
             
             # Clear all button
             if st.session_state.current_annotations:
-                if st.button("🗑️ Tüm Etiketleri Temizle", use_container_width=True):
+                if st.button("🗑️ Clear All Annotations", use_container_width=True):
                     st.session_state.current_annotations = []
                     self._save_annotations()
                     st.rerun()
@@ -184,7 +184,7 @@ class AnnotationInterface:
     def _render_canvas(self):
         """Render the annotation canvas"""
         if st.session_state.current_image is None:
-            st.info("👈 Lütfen sol panelden bir görüntü yükleyin veya seçin")
+            st.info("👈 Please upload or select an image from the left panel")
             return
         
         # Load image
@@ -198,12 +198,12 @@ class AnnotationInterface:
         col1, col2 = st.columns([3, 1])
         with col1:
             zoom_level = st.slider(
-                "🔍 Zoom Seviyesi",
+                "🔍 Zoom Level",
                 min_value=50,
                 max_value=200,
                 value=100,
                 step=10,
-                help="Görüntüyü büyütmek için kaydırın (hassas çizim için)"
+                help="Slide to zoom in for precise drawing"
             )
         with col2:
             st.metric("Zoom", f"{zoom_level}%")
@@ -215,34 +215,34 @@ class AnnotationInterface:
         canvas_height = int(canvas_width * aspect_ratio)
         
         # Display image info
-        st.info(f"📐 Orijinal Boyut: {img_width} x {img_height} px | Canvas Boyut: {canvas_width} x {canvas_height} px")
+        st.info(f"📐 Original Size: {img_width} x {img_height} px | Canvas Size: {canvas_width} x {canvas_height} px")
         
         # Instructions
-        with st.expander("📖 Kullanım Talimatları", expanded=False):
+        with st.expander("📖 Usage Instructions", expanded=False):
             st.markdown("""
-            ### Poligon Çizimi
-            1. Sağ panelden etiket sınıfını seçin
-            2. Görüntü üzerinde yapının etrafına tıklayarak poligon çizin
-            3. Poligonu kapatmak için ilk noktaya yakın tıklayın
-            4. Birden fazla yapı etiketleyebilirsiniz
-            5. "Etiketleri Kaydet" butonuna tıklayarak kaydedin
+            ### Polygon Drawing
+            1. Select label class from right panel
+            2. Click on the image to draw polygon around structure
+            3. Click near the first point to close the polygon
+            4. You can label multiple structures
+            5. Click "Save Annotations" button to save
             
-            ### İpuçları
-            - Diş, lezyon, dolgu gibi yapıları dikkatli çizin
-            - Poligon en az 3 nokta içermelidir
-            - Yanlış etiketleri silmek için sağ paneldeki çöp kutusu ikonunu kullanın
+            ### Tips
+            - Draw teeth, lesions, fillings and other structures carefully
+            - Polygon must contain at least 3 points
+            - Use the trash icon in right panel to delete wrong annotations
             """)
         
         # Drawing mode selection
         drawing_mode = st.radio(
-            "Mod",
-            options=["Poligon Çiz", "Görüntüle"],
+            "Mode",
+            options=["Draw Polygon", "View"],
             horizontal=True,
-            help="Poligon çizmek veya sadece görüntülemek için mod seçin"
+            help="Select mode to draw polygons or just view"
         )
         
         # Canvas for drawing
-        if drawing_mode == "Poligon Çiz":
+        if drawing_mode == "Draw Polygon":
             stroke_color = self.classes[st.session_state.get('selected_class', 0)]['color']
             
             canvas_result = st_canvas(
@@ -263,7 +263,7 @@ class AnnotationInterface:
                 objects = canvas_result.json_data["objects"]
                 
                 # Add new polygons to annotations
-                if st.button("➕ Poligonu Ekle"):
+                if st.button("➕ Add Polygon"):
                     if objects:
                         # Get the last drawn object
                         last_obj = objects[-1]
@@ -285,15 +285,15 @@ class AnnotationInterface:
                                     'class_id': st.session_state.get('selected_class', 0),
                                     'polygon': polygon
                                 })
-                                st.success(f"✅ Poligon eklendi ({len(polygon)} nokta)")
+                                st.success(f"✅ Polygon added ({len(polygon)} points)")
                                 st.rerun()
                             else:
-                                st.warning("⚠️ Poligon en az 3 nokta içermelidir")
+                                st.warning("⚠️ Polygon must contain at least 3 points")
         
         else:  # View mode
             # Draw existing annotations on image
             img_with_annotations = self._draw_annotations_on_image(img_array)
-            st.image(img_with_annotations, use_container_width=True, caption="Etiketli Görüntü")
+            st.image(img_with_annotations, use_container_width=True, caption="Annotated Image")
     
     def _draw_annotations_on_image(self, image: np.ndarray) -> np.ndarray:
         """Draw all annotations on the image"""
@@ -318,7 +318,7 @@ class AnnotationInterface:
             if polygon:
                 centroid_x = int(np.mean([p[0] for p in polygon]))
                 centroid_y = int(np.mean([p[1] for p in polygon]))
-                class_name = self.classes[class_id]['name_tr']
+                class_name = self.classes[class_id]['name'].title()
                 
                 cv2.putText(
                     img_copy, class_name,

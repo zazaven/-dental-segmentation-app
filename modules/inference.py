@@ -31,7 +31,7 @@ class InferenceInterface:
     
     def render(self):
         """Render the inference interface"""
-        st.header("🔍 AI Segmentasyon")
+        st.header("🔍 AI Segmentation")
         st.markdown("Eğitilmiş model ile panoramik diş röntgenlerinde otomatik segmentasyon yapın.")
         
         # Create two columns
@@ -152,11 +152,11 @@ class InferenceInterface:
             img_array = np.array(image)
             
             # Display original image
-            st.subheader("Orijinal Görüntü")
+            st.subheader("Original Image")
             st.image(image, use_container_width=True)
             
             # Run inference button
-            if st.button("🚀 Segmentasyon Yap", type="primary", use_container_width=True):
+            if st.button("🚀 Run Segmentation", type="primary", use_container_width=True):
                 with st.spinner("Segmentasyon yapılıyor..."):
                     self._run_inference(img_array, uploaded_file.name)
             
@@ -192,7 +192,7 @@ class InferenceInterface:
     def _display_results(self):
         """Display inference results"""
         st.markdown("---")
-        st.subheader("Segmentasyon Sonuçları")
+        st.subheader("Segmentation Results")
         
         results_data = st.session_state.inference_results
         results = results_data['results'][0]

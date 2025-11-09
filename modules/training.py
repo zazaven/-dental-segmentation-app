@@ -36,11 +36,11 @@ class TrainingInterface:
     
     def render(self):
         """Render the training interface"""
-        st.header("🎓 Model Eğitimi")
+        st.header("🎓 Model Training")
         st.markdown("YOLO11 segmentasyon modelini özel veri setiniz üzerinde eğitin.")
         
         # Create tabs
-        tab1, tab2, tab3 = st.tabs(["📊 Veri Seti Hazırlama", "⚙️ Model Eğitimi", "📈 Eğitim Geçmişi"])
+        tab1, tab2, tab3 = st.tabs(["📊 Dataset Preparation", "⚙️ Model Training", "📈 Training History"])
         
         with tab1:
             self._render_dataset_preparation()
@@ -53,18 +53,18 @@ class TrainingInterface:
     
     def _render_dataset_preparation(self):
         """Render dataset preparation section"""
-        st.subheader("Veri Seti Hazırlama")
+        st.subheader("Dataset Preparation")
         
         # Check annotated images
         if os.path.exists(self.annotations_dir):
             annotation_files = [f for f in os.listdir(self.annotations_dir) if f.endswith('.txt')]
             n_annotated = len(annotation_files)
             
-            st.metric("Etiketlenmiş Görüntü Sayısı", n_annotated)
+            st.metric("Annotated Images Count", n_annotated)
             
             if n_annotated > 0:
                 total_annotations = count_annotations(self.annotations_dir)
-                st.metric("Toplam Etiket Sayısı", total_annotations)
+                st.metric("Total Annotations Count", total_annotations)
             
             if n_annotated < 10:
                 st.warning("⚠️ En az 10 etiketlenmiş görüntü önerilir. Daha fazla görüntü etiketleyin.")
@@ -386,7 +386,7 @@ class TrainingInterface:
     
     def _render_training_history(self):
         """Render training history"""
-        st.subheader("Eğitim Geçmişi")
+        st.subheader("Training History")
         
         # List trained models
         if os.path.exists(self.trained_models_dir):

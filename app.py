@@ -1,5 +1,5 @@
 """
-Dental Panoramic X-Ray Segmentation Application
+Vir AI - Dental Panoramic X-Ray Segmentation Application
 YOLO11-based AI segmentation tool for dental imaging
 """
 import streamlit as st
@@ -54,38 +54,38 @@ def main():
     # Sidebar
     with st.sidebar:
         st.image("https://img.icons8.com/color/96/000000/tooth.png", width=80)
-        st.title(config['app']['title'])
+        st.title("Vir AI")
         st.markdown("---")
         
         # Navigation
         page = st.radio(
-            "Navigasyon",
-            options=["🏠 Ana Sayfa", "🖊️ Etiketleme", "🎓 Model Eğitimi", "🔍 AI Segmentasyon"],
+            "Navigation",
+            options=["🏠 Home", "🖊️ Annotation", "🎓 Model Training", "🔍 AI Segmentation"],
             label_visibility="collapsed"
         )
         
         st.markdown("---")
         
         # Info
-        with st.expander("ℹ️ Hakkında"):
+        with st.expander("ℹ️ About"):
             st.markdown("""
-            **Dental Panoramik X-Ray Segmentasyon**
+            **Vir AI - Dental X-Ray Segmentation**
             
-            YOLO11 tabanlı AI segmentasyon aracı
+            YOLO11-based AI segmentation tool
             
-            **Özellikler:**
-            - Poligon tabanlı etiketleme
-            - Özel model eğitimi
-            - Otomatik segmentasyon
-            - Çoklu sınıf desteği
+            **Features:**
+            - Polygon-based annotation
+            - Custom model training
+            - Automatic segmentation
+            - Multi-class support
             
-            **Sınıflar:**
+            **Classes:**
             """)
             for cls in config['classes']:
-                st.markdown(f"- {cls['name_tr']} ({cls['name']})")
+                st.markdown(f"- {cls['name'].title()}")
         
         # Statistics
-        with st.expander("📊 İstatistikler"):
+        with st.expander("📊 Statistics"):
             # Count files
             n_images = 0
             n_annotations = 0
@@ -107,182 +107,179 @@ def main():
                 n_models = len([f for f in os.listdir(trained_models_dir)
                                if f.endswith('.pt')])
             
-            st.metric("Yüklenmiş Görüntü", n_images)
-            st.metric("Etiketlenmiş Görüntü", n_annotations)
-            st.metric("Eğitilmiş Model", n_models)
+            st.metric("Uploaded Images", n_images)
+            st.metric("Annotated Images", n_annotations)
+            st.metric("Trained Models", n_models)
     
     # Main content
-    if page == "🏠 Ana Sayfa":
+    if page == "🏠 Home":
         render_home_page(config)
-    elif page == "🖊️ Etiketleme":
+    elif page == "🖊️ Annotation":
         render_annotation_page(config)
-    elif page == "🎓 Model Eğitimi":
+    elif page == "🎓 Model Training":
         render_training_page(config)
-    elif page == "🔍 AI Segmentasyon":
+    elif page == "🔍 AI Segmentation":
         render_inference_page(config)
 
 
 def render_home_page(config):
     """Render home page"""
-    st.markdown('<div class="main-header">🦷 Dental Panoramik X-Ray Segmentasyon</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">YOLO11 ile AI Destekli Diş Görüntü Analizi</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">🦷 Vir AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">AI-Powered Dental Panoramic X-Ray Analysis</div>', unsafe_allow_html=True)
     
     st.markdown("---")
     
     # Introduction
     st.markdown("""
-    ## Hoş Geldiniz! 👋
+    ## Welcome! 👋
     
-    Bu uygulama, panoramik diş röntgenlerinde **diş**, **lezyon**, **dolgu** ve diğer dental yapıları 
-    otomatik olarak tespit etmek ve segmente etmek için geliştirilmiş bir AI aracıdır.
+    This application is an AI tool developed to automatically detect and segment **teeth**, **lesions**, **fillings**, 
+    and other dental structures in panoramic dental X-rays.
     
-    ### 🚀 Nasıl Çalışır?
+    ### 🚀 How It Works?
     
-    Uygulama üç ana adımdan oluşur:
+    The application consists of three main steps:
     """)
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown("""
-        ### 1️⃣ Etiketleme
+        ### 1️⃣ Annotation
         
-        - Panoramik röntgen görüntülerini yükleyin
-        - Diş, lezyon ve diğer yapıları poligonlarla işaretleyin
-        - Sınıf etiketleri atayın
-        - Etiketleri YOLO formatında kaydedin
+        - Upload panoramic X-ray images
+        - Mark teeth, lesions and other structures with polygons
+        - Assign class labels
+        - Save annotations in YOLO format
         """)
     
     with col2:
         st.markdown("""
-        ### 2️⃣ Model Eğitimi
+        ### 2️⃣ Model Training
         
-        - Etiketlenmiş veri setini hazırlayın
-        - YOLO11 model varyantını seçin
-        - Eğitim parametrelerini ayarlayın
-        - Modeli eğitin ve sonuçları görüntüleyin
+        - Prepare labeled dataset
+        - Select YOLO11 model variant
+        - Configure training parameters
+        - Train model and view results
         """)
     
     with col3:
         st.markdown("""
-        ### 3️⃣ AI Segmentasyon
+        ### 3️⃣ AI Segmentation
         
-        - Eğitilmiş modeli yükleyin
-        - Yeni panoramik röntgen yükleyin
-        - Otomatik segmentasyon yapın
-        - Sonuçları kaydedin ve analiz edin
+        - Load trained model
+        - Upload new panoramic X-ray
+        - Perform automatic segmentation
+        - Save and analyze results
         """)
     
     st.markdown("---")
     
     # Features
     st.markdown("""
-    ## ✨ Özellikler
+    ## ✨ Features
     
-    ### 🎯 Etiketleme Arayüzü
-    - **İnteraktif Poligon Çizimi**: Streamlit canvas ile kolay etiketleme
-    - **Çoklu Sınıf Desteği**: Diş, lezyon, dolgu, kron, implant, kanal tedavisi, çürük
-    - **Renk Kodlu Etiketler**: Her sınıf için farklı renk
-    - **Düzenleme ve Silme**: Etiketleri kolayca yönetin
-    - **YOLO Format**: Otomatik format dönüşümü
+    ### 🎯 Annotation Interface
+    - **Interactive Polygon Drawing**: Easy labeling with Streamlit canvas
+    - **Multi-Class Support**: Tooth, lesion, filling, crown, implant, root canal, caries
+    - **Color-Coded Labels**: Different color for each class
+    - **Edit and Delete**: Easily manage annotations
+    - **YOLO Format**: Automatic format conversion
     
-    ### 🎓 Model Eğitimi
-    - **5 Model Varyantı**: Nano'dan Extra Large'a kadar
-    - **Özelleştirilebilir Parametreler**: Epoch, batch size, learning rate, vb.
-    - **Gerçek Zamanlı İzleme**: Eğitim ilerlemesini takip edin
-    - **Otomatik Kaydetme**: En iyi model otomatik kaydedilir
-    - **Görselleştirme**: Metrikler, confusion matrix, tahminler
+    ### 🎓 Model Training
+    - **5 Model Variants**: From Nano to Extra Large
+    - **Customizable Parameters**: Epochs, batch size, learning rate, etc.
+    - **Real-Time Monitoring**: Track training progress
+    - **Auto-Save**: Best model saved automatically
+    - **Visualization**: Metrics, confusion matrix, predictions
     
-    ### 🔍 AI Segmentasyon
-    - **Otomatik Tespit**: Eğitilmiş model ile anlık segmentasyon
-    - **Ayarlanabilir Eşikler**: Güven ve IoU eşiklerini özelleştirin
-    - **Görselleştirme Seçenekleri**: Maskeler, etiketler, skorlar
-    - **Sonuç Dışa Aktarma**: Görüntüler, maskeler ve detaylar
-    - **Batch İşleme**: Birden fazla görüntüyü işleyin
+    ### 🔍 AI Segmentation
+    - **Automatic Detection**: Instant segmentation with trained model
+    - **Adjustable Thresholds**: Customize confidence and IoU thresholds
+    - **Visualization Options**: Masks, labels, scores
+    - **Export Results**: Images, masks and details
+    - **Batch Processing**: Process multiple images
     
-    ## 📋 Desteklenen Sınıflar
+    ## 📋 Supported Classes
     """)
     
     # Display classes
     for cls in config['classes']:
-        col_a, col_b, col_c = st.columns([1, 2, 4])
+        col_a, col_b = st.columns([1, 4])
         with col_a:
             st.markdown(f'<div style="width:30px;height:30px;background-color:{cls["color"]};border-radius:5px;"></div>', 
                        unsafe_allow_html=True)
         with col_b:
-            st.markdown(f"**{cls['name_tr']}**")
-        with col_c:
-            st.markdown(f"{cls['name']}")
+            st.markdown(f"**{cls['name'].title()}**")
     
     st.markdown("---")
     
     # Getting started
     st.markdown("""
-    ## 🎬 Başlangıç
+    ## 🎬 Getting Started
     
-    ### Adım 1: Görüntü Yükleme
-    1. Sol menüden **🖊️ Etiketleme** sayfasına gidin
-    2. Panoramik diş röntgeni yükleyin
-    3. Görüntünüz otomatik olarak yüklenecektir
+    ### Step 1: Upload Images
+    1. Go to **🖊️ Annotation** page from left menu
+    2. Upload panoramic dental X-ray
+    3. Your image will be loaded automatically
     
-    ### Adım 2: Etiketleme
-    1. Sağ panelden etiket sınıfını seçin
-    2. Görüntü üzerinde yapının etrafına poligon çizin
-    3. "Poligonu Ekle" butonuna tıklayın
-    4. Tüm yapıları etiketledikten sonra "Etiketleri Kaydet"
+    ### Step 2: Annotation
+    1. Select label class from right panel
+    2. Draw polygon around structure on image
+    3. Click "Add Polygon" button
+    4. After labeling all structures, click "Save Annotations"
     
-    ### Adım 3: Veri Seti Hazırlama
-    1. En az 10-20 görüntü etiketleyin (daha fazlası daha iyi)
-    2. **🎓 Model Eğitimi** sayfasına gidin
-    3. "Veri Setini Hazırla" butonuna tıklayın
-    4. Veri seti otomatik olarak train/val/test'e bölünecek
+    ### Step 3: Dataset Preparation
+    1. Label at least 10-20 images (more is better)
+    2. Go to **🎓 Model Training** page
+    3. Click "Prepare Dataset" button
+    4. Dataset will be automatically split into train/val/test
     
-    ### Adım 4: Model Eğitimi
-    1. Model varyantını seçin (başlangıç için Small önerilir)
-    2. Eğitim parametrelerini ayarlayın
-    3. "Eğitimi Başlat" butonuna tıklayın
-    4. Eğitim tamamlanana kadar bekleyin
+    ### Step 4: Model Training
+    1. Select model variant (Small recommended for beginners)
+    2. Configure training parameters
+    3. Click "Start Training" button
+    4. Wait for training to complete
     
-    ### Adım 5: AI Segmentasyon
-    1. **🔍 AI Segmentasyon** sayfasına gidin
-    2. Eğitilmiş modeli yükleyin
-    3. Yeni panoramik röntgen yükleyin
-    4. "Segmentasyon Yap" butonuna tıklayın
-    5. Sonuçları görüntüleyin ve kaydedin
+    ### Step 5: AI Segmentation
+    1. Go to **🔍 AI Segmentation** page
+    2. Load trained model
+    3. Upload new panoramic X-ray
+    4. Click "Run Segmentation" button
+    5. View and save results
     
-    ## 💡 İpuçları
+    ## 💡 Tips
     
-    - **Kaliteli Etiketleme**: Poligonları mümkün olduğunca doğru çizin
-    - **Yeterli Veri**: En az 50-100 etiketlenmiş görüntü önerilir
-    - **Dengeli Veri Seti**: Her sınıftan yeterli örnek bulundurun
-    - **Veri Artırma**: Eğitim sırasında veri artırma kullanın
-    - **Model Seçimi**: Küçük veri setleri için nano/small, büyük veri setleri için medium/large
-    - **Epoch Sayısı**: 100-200 epoch genellikle yeterlidir
-    - **GPU Kullanımı**: Mümkünse GPU ile eğitim yapın (çok daha hızlı)
+    - **Quality Annotation**: Draw polygons as accurately as possible
+    - **Sufficient Data**: At least 50-100 annotated images recommended
+    - **Balanced Dataset**: Ensure sufficient examples from each class
+    - **Data Augmentation**: Use data augmentation during training
+    - **Model Selection**: Nano/small for small datasets, medium/large for large datasets
+    - **Epoch Count**: 100-200 epochs usually sufficient
+    - **GPU Usage**: Train with GPU if possible (much faster)
     
-    ## 🔧 Teknik Detaylar
+    ## 🔧 Technical Details
     
     - **Model**: YOLO11 Instance Segmentation
     - **Framework**: Ultralytics
     - **Backend**: PyTorch
     - **UI**: Streamlit
     - **Format**: YOLO polygon format
-    - **Görüntü Boyutu**: 640x640 (varsayılan)
+    - **Image Size**: 640x640 (default)
     
-    ## 📚 Kaynaklar
+    ## 📚 Resources
     
-    - [YOLO11 Dokümantasyonu](https://docs.ultralytics.com/)
+    - [YOLO11 Documentation](https://docs.ultralytics.com/)
     - [Instance Segmentation Guide](https://docs.ultralytics.com/tasks/segment/)
     - [Training Tips](https://docs.ultralytics.com/modes/train/)
     
     ---
     
-    ### 🚀 Hadi Başlayalım!
+    ### 🚀 Let's Get Started!
     
-    Sol menüden **🖊️ Etiketleme** sayfasına giderek ilk görüntünüzü yükleyin.
+    Go to **🖊️ Annotation** page from left menu to upload your first image.
     """)
 
 
 if __name__ == "__main__":
     main()
-

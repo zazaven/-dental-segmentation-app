@@ -1,6 +1,6 @@
 # Application settings
 app:
-  title: "Dental Panoramik X-Ray Segmentasyon"
+  title: "Vir AI - Dental Panoramic X-Ray Segmentation"
   page_icon: "🦷"
   layout: "wide"
   initial_sidebar_state: "expanded"
@@ -9,31 +9,24 @@ app:
 classes:
   - id: 0
     name: "tooth"
-    name_tr: "diş"
     color: "#FF0000"
   - id: 1
     name: "lesion"
-    name_tr: "lezyon"
     color: "#00FF00"
   - id: 2
     name: "filling"
-    name_tr: "dolgu"
     color: "#0000FF"
   - id: 3
     name: "crown"
-    name_tr: "kron"
     color: "#FFFF00"
   - id: 4
     name: "implant"
-    name_tr: "implant"
     color: "#FF00FF"
   - id: 5
     name: "root_canal"
-    name_tr: "kanal tedavisi"
     color: "#00FFFF"
   - id: 6
     name: "caries"
-    name_tr: "çürük"
     color: "#FFA500"
 
 # Dataset split ratios
@@ -82,4 +75,3 @@ image:
   supported_formats: ["jpg", "jpeg", "png", "bmp"]
   display_width: 800
   annotation_canvas_height: 600
-
