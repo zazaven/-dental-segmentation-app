@@ -230,15 +230,11 @@ class AnnotationInterface:
         if drawing_mode == "Poligon Çiz":
             stroke_color = self.classes[st.session_state.get('selected_class', 0)]['color']
             
-            # Convert PIL Image to numpy array for canvas
-            # Use None if image is not available to avoid boolean check issues
-            canvas_image = np.array(image) if image is not None else None
-            
             canvas_result = st_canvas(
                 fill_color="rgba(255, 165, 0, 0.3)",
                 stroke_width=2,
                 stroke_color=stroke_color,
-                background_image=canvas_image,
+                background_image=image,
                 update_streamlit=True,
                 height=canvas_height,
                 width=canvas_width,
@@ -356,4 +352,3 @@ def render_annotation_page(config: Dict):
     """Main function to render annotation page"""
     interface = AnnotationInterface(config)
     interface.render()
-
